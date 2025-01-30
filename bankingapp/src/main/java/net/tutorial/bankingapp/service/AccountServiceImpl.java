@@ -12,6 +12,7 @@ import net.tutorial.bankingapp.dto.AccountDto;
 import net.tutorial.bankingapp.entity.Account;
 import net.tutorial.bankingapp.mapper.AccountMapper;
 import net.tutorial.bankingapp.repository.AccountRepository;
+import net.tutorial.bnkingapp.exception.BankingappNotFoundException;
 
 
 @Service
@@ -61,7 +62,7 @@ public class AccountServiceImpl implements AccountService {
 		.orElseThrow(() -> new RuntimeException("No Account found with given id"));
 		
 		if(account.getBalance()<amount)
-			throw new RuntimeException("Account does not have sufficient balance");
+			throw new BankingappNotFoundException("The entered amount is greater than the balance");
 		
 		Double total = account.getBalance() - amount;
 		account.setBalance(total);
@@ -75,6 +76,7 @@ public class AccountServiceImpl implements AccountService {
 		// TODO Auto-generated method stub
 		
 		List<Account> accounts = accountRepo.findAll();
+		
 		
 		return accounts.stream()
 				.map((account) -> AccountMapper.mapToAccountDto(account))
